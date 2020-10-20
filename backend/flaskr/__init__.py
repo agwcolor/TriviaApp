@@ -122,10 +122,6 @@ def create_app(test_config=None):
       question = (Question(question=new_question, answer=new_answer,
                            category=new_category, difficulty=new_difficulty))
       if all([new_question, new_answer, new_category, new_difficulty]):
-        print(new_question, " is the new question",
-              new_answer, " is th new answer",
-              new_category, " is th enew category",
-              new_difficulty, " is the new diff")
         question.insert()
         return jsonify({
           "success": True,
