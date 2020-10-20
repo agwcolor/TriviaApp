@@ -53,15 +53,28 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to add question. Please try your request again')
+        alert('Unable to add question. Please reload the page, then enter both question & answer.')
+        this.setState({question:"",answer:"",difficulty:"1",category:"1",})
         return;
       }
     })
+    /*this.setState({question:"",answer:"",difficulty:"1",category:"1",})*/
   }
 
   handleChange = (event) => {
     this.setState({[event.target.name]: event.target.value})
+
+    console.log(JSON.stringify(this.state.question))
   }
+
+  handleReset = () => {
+    Array.from(document.querySelectorAll("input")).forEach(
+      input => (input.value = "")
+    );
+    this.setState({
+      itemvalues: [{}]
+    });
+  };
 
   render() {
     return (
@@ -70,11 +83,11 @@ class FormView extends Component {
         <form className="form-view" id="add-question-form" onSubmit={this.submitQuestion}>
           <label>
             Question
-            <input type="text" name="question" onChange={this.handleChange}/>
+            <input type="text" name="question" autoComplete="off" onChange={this.handleChange}/>
           </label>
           <label>
             Answer
-            <input type="text" name="answer" onChange={this.handleChange}/>
+            <input type="text" name="answer" autoComplete="off" onChange={this.handleChange}/>
           </label>
           <label>
             Difficulty
