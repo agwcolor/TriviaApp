@@ -45,7 +45,8 @@ def create_app(test_config=None):
     def get_categories():
         # reshape `categories` return value to {'1':'Science',...,'6':'Sports'}
         category_dict = {cat.id: cat.type for cat in Category.query.all()}
-        if category_dict:
+        print(category_dict)
+        if len(category_dict) > 0:
             return jsonify({  # start by building out request body
                 'success': True,
                 'categories': category_dict  # formatted_categories
@@ -68,12 +69,13 @@ def create_app(test_config=None):
     @app.route('/questions', methods=['GET'])
     def get_questions():
         questions = Question.query.all()
-        current_questions = paginate_questions(request, questions)
-        # reshape `categories` to {id:type,...,'6':'Sports'}
-        category_dict = {cat.id: cat.type for cat in Category.query.all()}
-        if len(current_questions) == 0:
+        page = request.args.get('page', 1, type=int)
+        if page > (len(questions) // 10) + 1:
             abort(404)
         else:
+            current_questions = paginate_questions(request, questions)
+            # reshape `categories` to {id:type,...,'6':'Sports'}
+            category_dict = {cat.id: cat.type for cat in Category.query.all()}
             return jsonify({  # start by building out request body
                 'success': True,
                 'questions': current_questions,
